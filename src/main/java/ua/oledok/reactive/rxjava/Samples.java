@@ -5,7 +5,7 @@ import io.reactivex.Observable;
 
 import java.util.Arrays;
 
-public class Sample1 {
+public class Samples {
     private static final String[] STRINGS = {
             "the",
             "quick",
@@ -18,6 +18,7 @@ public class Sample1 {
             "dog"
     };
 
+    @SuppressWarnings("Duplicates")
     public static void main(String[] args) {
         oneJust();
         twoJust();
@@ -38,7 +39,7 @@ public class Sample1 {
                 .flatMap(w -> Observable.fromArray(w.split("")))
                 .distinct()
                 .sorted()
-                .zipWith(Observable.range(1, Integer.MAX_VALUE), Sample1::formatZipped));
+                .zipWith(Observable.range(1, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static void zipDistinctSortedLettersWithRange() {
@@ -47,7 +48,7 @@ public class Sample1 {
                 .flatMap(w -> Observable.fromArray(w.split("")))
                 .distinct()
                 .sorted()
-                .zipWith(Observable.range(1, Integer.MAX_VALUE), Sample1::formatZipped));
+                .zipWith(Observable.range(1, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static void zipDistinctLettersWithRange() {
@@ -55,20 +56,20 @@ public class Sample1 {
                 .fromIterable(Arrays.asList(STRINGS))
                 .flatMap(w -> Observable.fromArray(w.split("")))
                 .distinct()
-                .zipWith(Observable.range(1, Integer.MAX_VALUE), Sample1::formatZipped));
+                .zipWith(Observable.range(1, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static void zipWordsWithRange() {
         printOn(Observable
                 .fromIterable(Arrays.asList(STRINGS))
-                .zipWith(Observable.range(1, Integer.MAX_VALUE), Sample1::formatZipped));
+                .zipWith(Observable.range(1, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static void zipLettersWithRange() {
         printOn(Observable
                 .fromIterable(Arrays.asList(STRINGS))
                 .flatMap(w -> Observable.fromArray(w.split("")))
-                .zipWith(Observable.range(1, Integer.MAX_VALUE), Sample1::formatZipped));
+                .zipWith(Observable.range(1, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static String formatZipped(String w, Integer i) {
