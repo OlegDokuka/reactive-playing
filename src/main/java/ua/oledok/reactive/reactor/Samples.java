@@ -2,6 +2,9 @@ package ua.oledok.reactive.reactor;
 
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
 
 public class Samples {
     private static final String[] STRINGS = {
@@ -43,35 +46,43 @@ public class Samples {
     }
 
     private static void zipWordsWithRange() {
-
+        printOn(Flux
+                .fromIterable(Arrays.asList(STRINGS))
+                .zipWith(Flux.range(0, Integer.MAX_VALUE), Samples::formatZipped));
     }
 
     private static void fromRange() {
-
+        printOn(Flux.range(0, 5));
     }
 
     private static void correctFromList() {
-
+        printOn(Flux.fromIterable(Arrays.asList(STRINGS)));
     }
 
     private static void justList() {
-
+        printOn(Flux.just(Arrays.asList(STRINGS)));
     }
 
     private static void twoJust() {
-        Flux
-                .just("Hello", "World")
-                .log()
-                .subscribe();
+        printOn(Flux.just("Hello", "World"));
     }
 
     private static void zipReplacedDistinctSortedLettersWithRange() {
     }
 
     private static void oneJust() {
-        Flux
-                .just("Howdy!")
-                .log()
-                .subscribe();
+        printOn(Flux.just("Howdy!"));
+    }
+
+    private static void printOn(Flux<?> flux) {
+        flux.subscribe(System.out::println);
+    }
+
+    private static void printOn(Mono<?> mono) {
+        mono.subscribe(System.out::println);
+    }
+
+    private static String formatZipped(String w, Integer i) {
+        return String.format("%2d. %s", i, w);
     }
 }
