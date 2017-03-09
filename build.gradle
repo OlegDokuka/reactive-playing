@@ -1,18 +1,39 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 group 'ua.oledok.reactive'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logback_version
