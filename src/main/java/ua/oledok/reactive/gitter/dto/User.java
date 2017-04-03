@@ -1,4 +1,4 @@
-package ua.oledok.reactive.rxjava.gitter.domain;
+package ua.oledok.reactive.gitter.dto;
 
 import lombok.Data;
 
