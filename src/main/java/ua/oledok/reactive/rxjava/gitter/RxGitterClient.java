@@ -1,7 +1,5 @@
 package ua.oledok.reactive.rxjava.gitter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.buffer.ByteBuf;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -10,17 +8,15 @@ import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.netty.protocol.http.client.HttpClient;
 import io.reactivex.netty.protocol.http.client.HttpClientResponse;
 import lombok.SneakyThrows;
-import lombok.val;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import ua.oledok.reactive.gitter.GitterClient;
 import ua.oledok.reactive.gitter.dto.Message;
+import ua.oledok.reactive.gitter.utils.MessageEncoder;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
-import java.io.IOException;
-import java.io.InputStream;
 
 public final class RxGitterClient implements GitterClient {
     private final ConnectableFlowable<Message> connectableFlowable;
@@ -84,36 +80,11 @@ public final class RxGitterClient implements GitterClient {
                 .addHeader("Authorization", "Bearer 3cd4820adf59b6a7116f99d92f68a1b786895ce7")
                 .flatMap(HttpClientResponse::getContent)
                 .filter(bb -> bb.capacity() > 2)
-                .map(this::mapToMessage)
+                .map(MessageEncoder::mapToMessage)
                 .doOnNext(m -> System.out.println("Log Emit: " + m))
                 .subscribe(emitter::onNext, emitter::onError, emitter::onComplete);
     }
 
-    @SneakyThrows
-    private Message mapToMessage(ByteBuf bb) {
-        val buf = bb.nioBuffer();
-
-        return new ObjectMapper().readValue(new InputStream() {
-
-            public int read() throws IOException {
-                if (!buf.hasRemaining()) {
-                    return -1;
-                }
-                return buf.get() & 0xFF;
-            }
-
-            public int read(byte[] bytes, int off, int len)
-                    throws IOException {
-                if (!buf.hasRemaining()) {
-                    return -1;
-                }
-
-                len = Math.min(len, buf.remaining());
-                buf.get(bytes, off, len);
-                return len;
-            }
-        }, Message.class);
-    }
 
     @Override
     public Publisher<Message> stream() {
