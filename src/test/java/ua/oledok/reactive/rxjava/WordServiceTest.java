@@ -7,7 +7,11 @@ import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
 import org.junit.Test;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
@@ -25,6 +29,16 @@ public class WordServiceTest {
             "dog"
     };
     private WordService wordService = new WordServiceSupport();
+
+    @Test
+    public void test() {
+        StepVerifier.create(Mono.fromDirect(Flux.interval(Duration.ofMillis(1)).take(2)))
+                .expectSubscription()
+                .expectNext(0L)
+                .thenAwait(Duration.ofMillis(1))
+                .expectNext(1L)
+                .verifyComplete();
+    }
 
     @Test
     public void shouldProcessWords() {

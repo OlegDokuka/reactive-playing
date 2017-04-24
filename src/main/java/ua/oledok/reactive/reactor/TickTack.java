@@ -4,6 +4,7 @@ package ua.oledok.reactive.reactor;
 import reactor.core.publisher.Flux;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -20,8 +21,8 @@ public class TickTack {
     }
 
     private static Flux<Long> clock() {
-        Flux<Long> fast = Flux.intervalMillis(1000);
-        Flux<Long> slow = Flux.intervalMillis(3000);
+        Flux<Long> fast = Flux.interval(Duration.ofMillis(1000));
+        Flux<Long> slow = Flux.interval(Duration.ofMillis(3000));
 
         return Flux.merge(
                 slow.filter(t -> isSlowTickTime()).doOnEach(w -> System.out.println("<SLOW>")),

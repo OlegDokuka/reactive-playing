@@ -37,7 +37,7 @@ public class ReactorGitterClient implements GitterClient {
                 .create()
                 .get("https://stream.gitter.im/v1/rooms/" + roomId + "/chatMessages",
                         (r) -> r.addHeader("Authorization", "Bearer 3cd4820adf59b6a7116f99d92f68a1b786895ce7"))
-                .flatMap(HttpClientResponse::receiveContent)
+                .flatMapMany(HttpClientResponse::receiveContent)
                 .map(ByteBufHolder::content)
                 .filter(bb -> bb.capacity() > 2)
                 .map(MessageEncoder::mapToMessage)

@@ -4,6 +4,7 @@ package ua.oledok.reactive.reactor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -96,21 +97,21 @@ public class Samples {
     private static void shortCircuit() {
         printOn(Mono
                 .just("Hello")
-                .concatWith(Mono.just("World!... with delay").delaySubscriptionMillis(500)));
+                .concatWith(Mono.just("World!... with delay").delaySubscription(Duration.ofMillis(500))));
     }
 
     private static void shortCircuitBlocking() {
         printOn(Mono
                 .just("Hello")
-                .concatWith(Mono.just("World!... with delay").delaySubscriptionMillis(500))
+                .concatWith(Mono.just("World!... with delay").delaySubscription(Duration.ofMillis(500)))
                 .toStream());
     }
 
     public static void firstEmitting() {
         Mono<String> a = Mono.just("oops I’m late")
-                .delaySubscriptionMillis(450);
+                .delaySubscription(Duration.ofMillis(450));
         Flux<String> b = Flux.just("let’s get", "the party", "started")
-                .delayElementsMillis(400);
+                .delaySubscription(Duration.ofMillis(400));
 
         printOn(Flux.firstEmitting(a, b)
                 .toStream());

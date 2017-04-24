@@ -43,7 +43,8 @@ dependencies {
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava_version
     compile group: 'io.reactivex', name: 'rxnetty-http', version: rxnetty_version
 
-    compile group: 'io.projectreactor', name:'reactor-core', version: reactor_version
+    compile group: 'io.projectreactor', name:'reactor-core'
+    testCompile group: 'io.projectreactor.addons', name:'reactor-test'
 
 
 
